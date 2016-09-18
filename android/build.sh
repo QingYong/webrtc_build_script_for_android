@@ -201,18 +201,22 @@ execute_build() {
     then
         ARCH="x86"
         STRIP="$ANDROID_TOOLCHAINS/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-strip"
+        gn gen out_android_x86/Release --args='target_os=\"android\" target_cpu=\"x86\"' 
     elif [ "$WEBRTC_ARCH" = "x86_64" ] ;
     then
         ARCH="x86_64"
         STRIP="$ANDROID_TOOLCHAINS/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-strip"
+        gn gen out_android_x86_64/Release --args='target_os=\"android\" target_cpu=\"x86_64\"' 
     elif [ "$WEBRTC_ARCH" = "armv7" ] ;
     then
         ARCH="armeabi-v7a"
         STRIP="$ANDROID_TOOLCHAINS/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-strip"
+	gn gen out_android_armeabi-v7a/Release --args='target_os=\"android\" target_cpu=\"armv7\"' 
     elif [ "$WEBRTC_ARCH" = "armv8" ] ;
     then
         ARCH="arm64-v8a"
         STRIP="$ANDROID_TOOLCHAINS/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-strip"
+        gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"' 
     fi
 
     if [ "$WEBRTC_DEBUG" = "true" ] ;
@@ -305,11 +309,11 @@ build_apprtc() {
     prepare_gyp_defines && execute_build
 
     export WEBRTC_ARCH=armv8
-    prepare_gyp_defines && gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"' && execute_build
+    prepare_gyp_defines && execute_build
 
     export WEBRTC_ARCH=x86
-    prepare_gyp_defines && gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"'  && execute_build
+    prepare_gyp_defines && execute_build
 
     export WEBRTC_ARCH=x86_64
-    prepare_gyp_defines && gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"' && execute_build
+    prepare_gyp_defines && execute_build
 }
