@@ -224,6 +224,12 @@ execute_build() {
 
     ARCH_OUT="out_android_${ARCH}"
     REVISION_NUM=`get_webrtc_revision`
+    ARGS="target_os=\"android\" target_cpu=\"$WEBRTC_ARCH\""
+    echo "ARGS is $ARGS"
+    $gn gen "$ARCH_OUT/$BUILD_TYPE --args=\'$ARGS\'"
+    #gn gen "\"$ARCH_OUT/$BUILD_TYPE\"" --args='target_os=\"android\" target_cpu=\"$WEBRTC_ARCH\"'
+    #gn gen "$ARCH_OUT/$BUILD_TYPE --args='target_os=\"android\" target_cpu=$WEBRTC_ARCH'"
+    # gn gen $ARCH_OUT/$BUILD_TYPE --args=$ARGS
     echo "Build ${WEBRTC_TARGET} in $BUILD_TYPE (arch: ${WEBRTC_ARCH:-arm})"
     exec_ninja "$ARCH_OUT/$BUILD_TYPE"
     
@@ -261,7 +267,7 @@ execute_build() {
     else
         
         echo "$BUILD_TYPE build for apprtc failed for revision $REVISION_NUM"
-        exit 1
+        #exit 1
     fi
 }
 
@@ -279,7 +285,7 @@ get_webrtc_revision() {
     if [ -z "$REVISION_NUMBER" ]
     then
       echo "Error grabbing revision number"
-      exit 1
+      #exit 1
     fi
 
     echo $REVISION_NUMBER
@@ -293,19 +299,17 @@ get_webrtc() {
 
 # Updates webrtc and builds apprtc
 build_apprtc() {
+    export PATH=`pwd`/depot_tools:"$PATH"
+    WEBRTC_RELEASE=true
     export WEBRTC_ARCH=armv7
-    prepare_gyp_defines &&
-    execute_build
+    prepare_gyp_defines && execute_build
 
     export WEBRTC_ARCH=armv8
-    prepare_gyp_defines &&
-    execute_build
+    prepare_gyp_defines && gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"' && execute_build
 
     export WEBRTC_ARCH=x86
-    prepare_gyp_defines &&
-    execute_build
+    prepare_gyp_defines && gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"'  && execute_build
 
     export WEBRTC_ARCH=x86_64
-    prepare_gyp_defines &&
-    execute_build
+    prepare_gyp_defines && gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"' && execute_build
 }
