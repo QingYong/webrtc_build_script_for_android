@@ -31,7 +31,7 @@ DEPOT_TOOLS="$PROJECT_ROOT/depot_tools"
 WEBRTC_ROOT="$PROJECT_ROOT/webrtc"
 create_directory_if_not_found "$WEBRTC_ROOT"
 BUILD="$WEBRTC_ROOT/libjingle_peerconnection_builds"
-WEBRTC_TARGET="AppRTCDemo"
+WEBRTC_TARGET="AppRTCMobile"
 
 ANDROID_TOOLCHAINS="$WEBRTC_ROOT/src/third_party/android_tools/ndk/toolchains"
 
@@ -196,27 +196,26 @@ execute_build() {
 
     echo Run gclient hooks
     gclient runhooks
-
     if [ "$WEBRTC_ARCH" = "x86" ] ;
     then
         ARCH="x86"
         STRIP="$ANDROID_TOOLCHAINS/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-strip"
-        gn gen out_android_x86/Release --args='target_os=\"android\" target_cpu=\"x86\"' 
+        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86"' 
     elif [ "$WEBRTC_ARCH" = "x86_64" ] ;
     then
         ARCH="x86_64"
         STRIP="$ANDROID_TOOLCHAINS/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-strip"
-        gn gen out_android_x86_64/Release --args='target_os=\"android\" target_cpu=\"x86_64\"' 
+        gn gen out_android_x86_64/Release --args='target_os="android" target_cpu="x64"' 
     elif [ "$WEBRTC_ARCH" = "armv7" ] ;
     then
         ARCH="armeabi-v7a"
         STRIP="$ANDROID_TOOLCHAINS/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-strip"
-	gn gen out_android_armeabi-v7a/Release --args='target_os=\"android\" target_cpu=\"armv7\"' 
+	gn gen out_android_armeabi-v7a/Release --args='target_os="android" target_cpu="arm"' 
     elif [ "$WEBRTC_ARCH" = "armv8" ] ;
     then
         ARCH="arm64-v8a"
         STRIP="$ANDROID_TOOLCHAINS/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-strip"
-        gn gen out_android_arm64-v8a/Release --args='target_os=\"android\" target_cpu=\"armv8\"' 
+        gn gen out_android_arm64-v8a/Release --args='target_os="android" target_cpu="arm64"' 
     fi
 
     if [ "$WEBRTC_DEBUG" = "true" ] ;
