@@ -302,8 +302,8 @@ get_webrtc() {
 
 # Updates webrtc and builds apprtc
 build_apprtc() {
+    export WEBRTC_DEBUG=false
     export PATH=`pwd`/depot_tools:"$PATH"
-    WEBRTC_RELEASE=true
     export WEBRTC_ARCH=armv7
     prepare_gyp_defines && execute_build
 
