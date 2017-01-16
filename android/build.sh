@@ -37,7 +37,7 @@ ANDROID_TOOLCHAINS="$WEBRTC_ROOT/src/third_party/android_tools/ndk/toolchains"
 
 exec_ninja() {
   echo "Running ninja"
-  ninja -C $1 $WEBRTC_TARGET
+  ninja -C $1 $WEBRTC_TARGET -j 8
 }
 
 # Installs the required dependencies on the machine
@@ -168,7 +168,10 @@ prepare_gyp_defines() {
     if [ -z $USER_GYP_DEFINES ]
     then
         echo "User has not specified any gyp defines so we proceed with default"
-        if [ "$WEBRTC_ARCH" = "x86" ] ;
+        echo "======================================================================"
+	echo "$WEBRTC_ARCH"
+        echo "======================================================================"
+	if [ "$WEBRTC_ARCH" = "x86" ] ;
         then
             wrX86
         elif [ "$WEBRTC_ARCH" = "x86_64" ] ;
@@ -200,22 +203,22 @@ execute_build() {
     then
         ARCH="x86"
         STRIP="$ANDROID_TOOLCHAINS/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-strip"
-        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86"' 
+        gn gen out_android_x86/Release --args='target_os="android" target_cpu="x86" is_debug=false' 
     elif [ "$WEBRTC_ARCH" = "x86_64" ] ;
     then
         ARCH="x86_64"
         STRIP="$ANDROID_TOOLCHAINS/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-strip"
-        gn gen out_android_x86_64/Release --args='target_os="android" target_cpu="x64"' 
+        gn gen out_android_x86_64/Release --args='target_os="android" target_cpu="x64" is_debug=false' 
     elif [ "$WEBRTC_ARCH" = "armv7" ] ;
     then
         ARCH="armeabi-v7a"
         STRIP="$ANDROID_TOOLCHAINS/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-strip"
-	gn gen out_android_armeabi-v7a/Release --args='target_os="android" target_cpu="arm"' 
+	gn gen out_android_armeabi-v7a/Release --args='target_os="android" target_cpu="arm" is_debug=false' 
     elif [ "$WEBRTC_ARCH" = "armv8" ] ;
     then
         ARCH="arm64-v8a"
         STRIP="$ANDROID_TOOLCHAINS/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-strip"
-        gn gen out_android_arm64-v8a/Release --args='target_os="android" target_cpu="arm64"' 
+        gn gen out_android_arm64-v8a/Release --args='target_os="android" target_cpu="arm64" is_debug=false' 
     fi
 
     if [ "$WEBRTC_DEBUG" = "true" ] ;
